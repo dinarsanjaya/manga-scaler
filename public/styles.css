@@ -1,0 +1,126 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  background-color: whitesmoke;
+}
+
+#app {
+  padding: 20px;
+  margin-top: 2rem;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  cursor: pointer;
+  margin: 5px 0;
+  transition: color 0.2s ease;
+}
+
+li:hover {
+  text-decoration: underline;
+  color: #007bff;
+}
+
+/* Gaya tabel */
+#judul-list th,
+#judul-list td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+#judul-list tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#judul-list tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+/* Navigation */
+.chapter-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 0;
+}
+
+.chapter-float {
+  position: fixed;
+  bottom: 0px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: whitesmoke;
+  z-index: 1000;
+  border-top: 2px solid #ccc;
+}
+
+select.chapter-list,
+.chapter-list-bottom {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Image Viewer */
+.image-container {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.image-container img {
+  max-width: 90%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: transform 0.5s ease;
+}
+
+@media (min-width: 1200px) {
+  .image-container img {
+    max-width: 60%;
+  }
+}

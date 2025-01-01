@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baca Komik</title>
+    <link rel="icon" type="image/png" href="/public/natacode.png">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <div id="content">
+            <div id="judul-list-container">
+                <table id="judul-list" style="margin: 0 auto; border-collapse: collapse; width: 60%; text-align: left;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #ccc; padding: 10px;">No</th>
+                            <th style="border: 1px solid #ccc; padding: 10px;">Judul Komik</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+            <div id="chapter-section" style="display: none;">
+                <h2>Chapter</h2>
+                <div class="chapter-navigation">
+                    <button id="prev-chapter" class="nav-btn" disabled>Prev (Shift + &LeftArrow;)</button>
+                    <select class="chapter-list"></select>
+                    <button id="next-chapter" class="nav-btn" disabled>Next (Shift + &RightArrow;)</button>
+                </div>
+            </div>
+
+            <div id="image-section" style="display: none;">
+                <div class="image-container" id="image-list"></div>
+
+                <div class="chapter-navigation chapter-float">
+                    <button id="prev-chapter-bottom" class="nav-btn" disabled>Prev (Shift + &LeftArrow;)</button>
+                    <select class="chapter-list-bottom"></select>
+                    <button id="next-chapter-bottom" class="nav-btn" disabled>Next (Shift + &RightArrow;)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/public/script.js"></script>
+</body>
+
+</html>
