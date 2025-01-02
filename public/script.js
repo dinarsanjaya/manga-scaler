@@ -1,5 +1,8 @@
 $(document).ready(function () {
-  const baseUrl = "http://localhost:3000";
+  let baseUrl = $(location).prop("href");
+  if (baseUrl.endsWith("/")) {
+    baseUrl = baseUrl.slice(0, -1);
+  }
 
   // Load judul list
   function loadJudul() {
