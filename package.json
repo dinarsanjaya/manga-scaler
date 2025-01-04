@@ -2,6 +2,10 @@
   "name": "komiku-scrap",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "scrap": "bun scrap.ts",
+    "serve": "bun index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/cheerio": "^0.22.35"

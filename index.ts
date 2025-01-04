@@ -1,27 +1,13 @@
 import { serve } from "bun";
 import { readFileSync, readdirSync, statSync } from "fs";
 import { join } from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const { WEB_SERVER_PORT = "3000" } = process.env;
 
 const komikPath = "./komik";
-const indexPath = join(import.meta.dir, "index.html");
-
-// Helper untuk membaca direktori
-function readKomik(path: string): Record<string, any> {
-  const result: Record<string, any> = {};
-  const items = readdirSync(path);
-
-  for (const item of items) {
-    const fullPath = join(path, item);
-    const stats = statSync(fullPath);
-
-    if (stats.isDirectory()) {
-      result[item] = readKomik(fullPath); // Rekursif untuk subfolder
-    } else if (stats.isFile() && item.match(/\.(png|jpg|jpeg|gif)$/)) {
-      result[item] = `/api/image?path=${encodeURIComponent(fullPath)}`;
-    }
-  }
-  return result;
-}
 
 // Helper untuk menambahkan header CORS
 function withCORS(response: Response): Response {
@@ -159,9 +145,9 @@ function handleRequest(req: Request): Response {
 // Start the server
 serve({
   fetch: handleRequest,
-  port: 3000,
+  port: parseInt(WEB_SERVER_PORT),
   hostname: "0.0.0.0",
 });
 
 console.clear();
-console.log("Server running at http://localhost:3000");
+console.log(`Server started at http://localhost:${WEB_SERVER_PORT}`);
