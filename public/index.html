@@ -14,11 +14,11 @@
     <div id="app">
         <div id="content">
             <div id="judul-list-container">
-                <table id="judul-list" style="margin: 0 auto; border-collapse: collapse; width: 60%; text-align: left;">
+                <table id="judul-list" class="manga-table">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid #ccc; padding: 10px;">No</th>
-                            <th style="border: 1px solid #ccc; padding: 10px;">Judul Komik</th>
+                            <th>No</th>
+                            <th>Judul Komik</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -26,21 +26,21 @@
             </div>
 
 
-            <div id="chapter-section" style="display: none;">
+            <div id="chapter-section" class="d-none">
                 <h2>Chapter</h2>
                 <div class="chapter-navigation">
                     <button id="prev-chapter" class="nav-btn" disabled>Prev (Shift + &LeftArrow;)</button>
-                    <select class="chapter-list"></select>
+                    <select class="chapter-list" title="Chapter List"></select>
                     <button id="next-chapter" class="nav-btn" disabled>Next (Shift + &RightArrow;)</button>
                 </div>
             </div>
 
-            <div id="image-section" style="display: none;">
+            <div id="image-section" class="d-none">
                 <div class="image-container" id="image-list"></div>
 
                 <div class="chapter-navigation chapter-float">
                     <button id="prev-chapter-bottom" class="nav-btn" disabled>Prev (Shift + &LeftArrow;)</button>
-                    <select class="chapter-list-bottom"></select>
+                    <select class="chapter-list-bottom" title="Chapter List"></select>
                     <button id="next-chapter-bottom" class="nav-btn" disabled>Next (Shift + &RightArrow;)</button>
                 </div>
             </div>
