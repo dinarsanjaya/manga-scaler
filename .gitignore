@@ -176,3 +176,7 @@ dist
 
 # All comics
 komik/*
+
+# History
+history.txt
+

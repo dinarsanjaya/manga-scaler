@@ -1,178 +1,200 @@
+// Constants
+const SELECTORS = {
+  judulList: "#judul-list",
+  chapterList: ".chapter-list",
+  chapterListBottom: ".chapter-list-bottom",
+  imageList: "#image-list",
+  prevChapter: "#prev-chapter",
+  nextChapter: "#next-chapter",
+  prevChapterBottom: "#prev-chapter-bottom",
+  nextChapterBottom: "#next-chapter-bottom",
+  chapterSection: "#chapter-section",
+  imageSection: "#image-section",
+};
+
+const STORAGE_KEYS = {
+  currentJudul: "currentJudul",
+  currentChapter: "currentChapter",
+};
+
+const KEYBOARD = {
+  RIGHT_ARROW: 39,
+  LEFT_ARROW: 37,
+};
+
 $(document).ready(function () {
-  let baseUrl = $(location).prop("href");
-  if (baseUrl.endsWith("/")) {
-    baseUrl = baseUrl.slice(0, -1);
-  }
+  // Cache DOM elements
+  const $judulList = $(SELECTORS.judulList);
+  const $chapterList = $(SELECTORS.chapterList);
+  const $chapterListBottom = $(SELECTORS.chapterListBottom);
+  const $imageList = $(SELECTORS.imageList);
+  const $chapterSection = $(SELECTORS.chapterSection);
+  const $imageSection = $(SELECTORS.imageSection);
 
-  // Load judul list
-  function loadJudul() {
-    $.get(`${baseUrl}/api/komik`, function (data) {
-      const judulTableBody = $("#judul-list tbody");
+  // Get base URL
+  const baseUrl = new URL(window.location.href).origin;
+
+  // API endpoints
+  const API = {
+    getKomik: () => `${baseUrl}/api/komik`,
+    getChapters: (judul) => `${baseUrl}/api/komik/${judul}`,
+    getImages: (judul, chapter) => `${baseUrl}/api/komik/${judul}/${chapter}`,
+  };
+
+  async function loadJudul() {
+    try {
+      const data = await $.get(API.getKomik());
+      const judulTableBody = $judulList.find("tbody");
       judulTableBody.empty();
-      data.forEach((judul, index) => {
-        judulTableBody.append(`
-                <tr data-judul="${judul}">
-                    <td>${index + 1}</td>
-                    <td>${judul}</td>
-                </tr>
-            `);
-      });
 
-      // Cek localStorage untuk judul terakhir
-      const currentJudul = localStorage.getItem("currentJudul");
+      const rows = data
+        .map(
+          (judul, index) => `
+        <tr data-judul="${judul}">
+          <td>${index + 1}</td>
+          <td>${judul}</td>
+        </tr>
+      `
+        )
+        .join("");
+
+      judulTableBody.html(rows);
+
+      const currentJudul = localStorage.getItem(STORAGE_KEYS.currentJudul);
       if (currentJudul) {
         loadChapter(currentJudul);
       }
-    });
+    } catch (error) {
+      console.error("Error loading judul:", error);
+    }
   }
 
-  // Load chapter list
-  function loadChapter(judul) {
-    $.get(`${baseUrl}/api/komik/${judul}`, function (data) {
-      const chapterListTop = $(".chapter-list");
-      const chapterListBottom = $(".chapter-list-bottom");
+  async function loadChapter(judul) {
+    try {
+      const data = await $.get(API.getChapters(judul));
 
-      chapterListTop.empty();
-      chapterListBottom.empty();
+      const options = data
+        .map(
+          (chapter) =>
+            `<option value="${chapter}" data-judul="${judul}">${chapter}</option>`
+        )
+        .join("");
 
-      data.forEach((chapter) => {
-        const optionHtml = `<option value="${chapter}" data-judul="${judul}">${chapter}</option>`;
-        chapterListTop.append(optionHtml);
-        chapterListBottom.append(optionHtml);
-      });
+      $chapterList.html(options);
+      $chapterListBottom.html(options);
 
-      const currentChapter = localStorage.getItem("currentChapter");
+      const currentChapter = localStorage.getItem(STORAGE_KEYS.currentChapter);
       const initialChapter =
         currentChapter && data.includes(currentChapter)
           ? currentChapter
           : data[0];
 
-      chapterListTop.val(initialChapter);
-      chapterListBottom.val(initialChapter);
+      $chapterList.val(initialChapter);
+      $chapterListBottom.val(initialChapter);
 
       updateNavigationButtons(data, initialChapter);
       loadImages(judul, initialChapter);
 
-      $("#chapter-section").show();
-    });
+      $chapterSection.removeClass("d-none");
+    } catch (error) {
+      console.error("Error loading chapters:", error);
+    }
   }
 
-  // Load images
-  function loadImages(judul, chapter) {
-    $.get(`${baseUrl}/api/komik/${judul}/${chapter}`, function (data) {
-      const imageList = $("#image-list");
-      imageList.empty();
-      data.forEach((imageUrl) => {
-        imageList.append(`<img src="${baseUrl}${imageUrl}" alt="Image">`);
-      });
+  async function loadImages(judul, chapter) {
+    try {
+      const data = await $.get(API.getImages(judul, chapter));
 
-      $("#image-section").show();
-      localStorage.setItem("currentJudul", judul);
-      localStorage.setItem("currentChapter", chapter);
-    });
+      const images = data
+        .map(
+          (imageUrl) =>
+            `<img src="${baseUrl}${imageUrl}" alt="Manga Page" loading="lazy">`
+        )
+        .join("");
+
+      $imageList.html(images);
+      $imageSection.removeClass("d-none");
+
+      localStorage.setItem(STORAGE_KEYS.currentJudul, judul);
+      localStorage.setItem(STORAGE_KEYS.currentChapter, chapter);
+    } catch (error) {
+      console.error("Error loading images:", error);
+    }
   }
 
-  // Update navigation buttons
   function updateNavigationButtons(chapters, currentChapter) {
     const currentIndex = chapters.indexOf(currentChapter);
     const isFirstChapter = currentIndex === 0;
     const isLastChapter = currentIndex === chapters.length - 1;
 
-    // Update tombol di atas
-    $("#prev-chapter").prop("disabled", isFirstChapter);
-    $("#next-chapter").prop("disabled", isLastChapter);
-
-    // Update tombol di bawah
-    $("#prev-chapter-bottom").prop("disabled", isFirstChapter);
-    $("#next-chapter-bottom").prop("disabled", isLastChapter);
+    $(SELECTORS.prevChapter).prop("disabled", isFirstChapter);
+    $(SELECTORS.nextChapter).prop("disabled", isLastChapter);
+    $(SELECTORS.prevChapterBottom).prop("disabled", isFirstChapter);
+    $(SELECTORS.nextChapterBottom).prop("disabled", isLastChapter);
   }
 
-  // Event listeners
-  $("#judul-list").on("click", "tr", function () {
-    const judul = $(this).data("judul");
+  function navigateChapter(direction) {
+    const chapters = $chapterList
+      .find("option")
+      .map((_, el) => $(el).val())
+      .get();
+    const currentChapter = $chapterList.val();
+    const currentIndex = chapters.indexOf(currentChapter);
+    const newIndex = currentIndex + direction;
 
-    // Reset chapter jika judul berubah
-    const currentJudul = localStorage.getItem("currentJudul");
+    if (newIndex >= 0 && newIndex < chapters.length) {
+      const newChapter = chapters[newIndex];
+      $chapterList.val(newChapter).trigger("change");
+      $chapterListBottom.val(newChapter);
+      updateNavigationButtons(chapters, newChapter);
+    }
+  }
+
+  // Event Handlers
+  $judulList.on("click", "tr", function () {
+    const judul = $(this).data("judul");
+    const currentJudul = localStorage.getItem(STORAGE_KEYS.currentJudul);
+
     if (currentJudul !== judul) {
-      localStorage.removeItem("currentChapter");
+      localStorage.removeItem(STORAGE_KEYS.currentChapter);
     }
 
     loadChapter(judul);
   });
 
-  $(".chapter-list").on("change", function () {
+  $chapterList.add($chapterListBottom).on("change", function () {
     const chapter = $(this).val();
-    $(".chapter-list-bottom").val(chapter);
-    const judul = localStorage.getItem("currentJudul");
-    const chapters = $(".chapter-list option")
+    const judul = localStorage.getItem(STORAGE_KEYS.currentJudul);
+    const chapters = $chapterList
+      .find("option")
       .map((_, el) => $(el).val())
       .get();
+
+    $chapterList.val(chapter);
+    $chapterListBottom.val(chapter);
     updateNavigationButtons(chapters, chapter);
     loadImages(judul, chapter);
   });
 
-  $(".chapter-list-bottom").on("change", function () {
-    const chapter = $(this).val();
-    $(".chapter-list").val(chapter);
-    const judul = localStorage.getItem("currentJudul");
-    const chapters = $(".chapter-list option")
-      .map((_, el) => $(el).val())
-      .get();
-    updateNavigationButtons(chapters, chapter);
-    loadImages(judul, chapter);
-  });
+  // Navigation buttons
+  $(SELECTORS.prevChapter)
+    .add(SELECTORS.prevChapterBottom)
+    .on("click", () => navigateChapter(-1));
+  $(SELECTORS.nextChapter)
+    .add(SELECTORS.nextChapterBottom)
+    .on("click", () => navigateChapter(1));
 
-  $("#prev-chapter").on("click", function () {
-    navigateToPreviousChapter();
-  });
-  $("#prev-chapter-bottom").on("click", function () {
-    navigateToPreviousChapter();
-  });
+  // Keyboard navigation
+  $(document).on("keydown", function (e) {
+    if (!e.shiftKey) return;
 
-  $("#next-chapter").on("click", function () {
-    navigateToNextChapter();
-  });
-  $("#next-chapter-bottom").on("click", function () {
-    navigateToNextChapter();
-  });
-
-  // jika key shift dan arrow right di press, maka akan pindah ke halaman berikutnya
-  $(document).keydown(function (e) {
-    if (e.shiftKey && e.keyCode === 39) {
-      navigateToNextChapter();
-    }
-    if (e.shiftKey && e.keyCode === 37) {
-      navigateToPreviousChapter();
+    if (e.keyCode === KEYBOARD.RIGHT_ARROW) {
+      navigateChapter(1);
+    } else if (e.keyCode === KEYBOARD.LEFT_ARROW) {
+      navigateChapter(-1);
     }
   });
 
-  function navigateToPreviousChapter() {
-    const chapters = $(".chapter-list option")
-      .map((_, el) => $(el).val())
-      .get();
-    const currentChapter = $(".chapter-list").val();
-    const prevIndex = chapters.indexOf(currentChapter) - 1;
-    if (prevIndex >= 0) {
-      $(".chapter-list, .chapter-list-bottom")
-        .val(chapters[prevIndex])
-        .trigger("change");
-      updateNavigationButtons(chapters, chapters[prevIndex]);
-    }
-  }
-
-  function navigateToNextChapter() {
-    const chapters = $(".chapter-list option")
-      .map((_, el) => $(el).val())
-      .get();
-    const currentChapter = $(".chapter-list").val();
-    const nextIndex = chapters.indexOf(currentChapter) + 1;
-    if (nextIndex < chapters.length) {
-      $(".chapter-list, .chapter-list-bottom")
-        .val(chapters[nextIndex])
-        .trigger("change");
-      updateNavigationButtons(chapters, chapters[nextIndex]);
-    }
-  }
-
+  // Initialize
   loadJudul();
 });

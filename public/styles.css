@@ -101,11 +101,13 @@ select.chapter-list,
   border-radius: 5px;
   background-color: var(--background-color);
   cursor: pointer;
+  color: var(--text-color);
   transition: background-color 0.2s ease;
 }
 
 .nav-btn:disabled {
   background-color: var(--background-color);
+  color: var(--secondary-color);
   cursor: not-allowed;
 }
 
