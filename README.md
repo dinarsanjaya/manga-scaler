@@ -1,9 +1,9 @@
-# Scraping Komik Fansub (komiku.id)
+# Scraping Komik Fansub (komiku.org)
 
-Tools ini adalah sebuah alat untuk melakukan scraping komik dari situs **[komiku.id](https://komiku.id)** dan melakukan auto scaling gambar komik menggunakan **[waifu2x-ncnn-vulkan](https://github.com/nihui/waifu2x-ncnn-vulkan)** agar resolusi gambar tidak low (sakit mata). Oh iya, juga tidak lupa menyediakan viewer untuk membaca komik yang sudah di simpan.
+Tools ini adalah sebuah alat untuk melakukan scraping komik dari situs **[komiku.org](https://komiku.org)** dan melakukan auto scaling gambar komik menggunakan **[waifu2x-ncnn-vulkan](https://github.com/nihui/waifu2x-ncnn-vulkan)** agar resolusi gambar tidak low (sakit mata). Oh iya, juga tidak lupa menyediakan viewer untuk membaca komik yang sudah di simpan.
 
 ## Fitur
-- Scraping komik dari **komiku.id**.
+- Scraping komik dari **komiku.org**.
 - Auto scaling kualitas gambar komik menggunakan **waifu2x**.
 - Web viewer untuk membaca komik yang telah di simpan.
 

@@ -13,7 +13,7 @@ dotenv.config();
 const CONFIG = {
   WAIFU2X_PATH:
     process.env.WAIFU2X_PATH || "~/Repos/tools/waifu2x/waifu2x-ncnn-vulkan",
-  BASE_KOMIKU_URL: process.env.BASE_KOMIKU_URL || "https://komiku.id",
+  BASE_KOMIKU_URL: process.env.BASE_KOMIKU_URL || "https://komiku.org",
   OUTPUT_DIR: process.env.OUTPUT_DIR || path.join(__dirname, "komik"),
   MIN_IMAGE_SIZE: parseInt(process.env.MIN_IMAGE_SIZE || "900"),
   MAX_IMAGE_SIZE: parseInt(process.env.MAX_IMAGE_SIZE || "1024"),
